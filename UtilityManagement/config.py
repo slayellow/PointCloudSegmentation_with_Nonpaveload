@@ -5,5 +5,6 @@ import numpy as np
 paths = dict(
         dataset_info = "parser/semantic-kitti.yaml",
         model_info = "parser/salsanext.yml",
-        pretrained_path = "/Users/jinseokhong/data/GTA5Dataset",
+        pretrained_path = "/Users/jinseokhong/data/SemanticKITTI",
+        save_path = "/Users/jinseokhong/data/SemanticKITTI/Result"
 )

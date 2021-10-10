@@ -8,11 +8,37 @@ from DataManagement.LaserScan import LaserScan, SemLaserScan
 import UtilityManagement.config as cf
 import os
 import matplotlib.pyplot as plt
-
+import cv2
 import yaml
 
 EXTENSIONS_SCAN = ['.bin']      # Dataset File Extension
 EXTENSIONS_LABEL = ['.label']   # Label File Extension
+
+
+def get_mpl_colormap(cmap_name):
+    cmap = plt.get_cmap(cmap_name)
+    # Initialize the matplotlib color map
+    sm = plt.cm.ScalarMappable(cmap=cmap)
+    # Obtain linear color range
+    color_range = sm.to_rgba(np.linspace(0, 1, 256), bytes=True)[:, 2::-1]
+    return color_range.reshape(256, 1, 3)
+
+
+def make_log_img(depth, mask, pred, gt, color_fn):
+    # input should be [depth, pred, gt]
+    # make range image (normalized to 0,1 for saving)
+    depth = (cv2.normalize(depth, None, alpha=0, beta=1,
+                           norm_type=cv2.NORM_MINMAX,
+                           dtype=cv2.CV_32F) * 255.0).astype(np.uint8)
+    out_img = cv2.applyColorMap(
+        depth, get_mpl_colormap('viridis')) * mask[..., None]
+    # make label prediction
+    pred_color = color_fn((pred * mask).astype(np.int32))
+    out_img = np.concatenate([out_img, pred_color], axis=0)
+    # make label gt
+    gt_color = color_fn(gt)
+    out_img = np.concatenate([out_img, gt_color], axis=0)
+    return (out_img).astype(np.uint8)
 
 
 def is_scan(filename):
@@ -232,6 +258,11 @@ class SemanticKitti(Dataset):
 
     def get_num_classes(self):
         return self.nclasses
+
+    def get_color(self, label):
+        label = self.map(label, self.learning_map_inv)
+        return self.map(label, self.color_map)
+
 
 def get_loader(dataset, batch_size, shuffle=True, num_worker=0):
     dataloader = DataLoader(

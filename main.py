@@ -144,6 +144,25 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
         batch_time_t.update(time.time() - end)      # 배치 크기만큼 불러와 학습을 마치고 BackPropagation까지 하는데 걸리는 시간
         end = time.time()
 
+        if model_info["train"]["save_scans"]:
+            # Result Color Map
+            mask_np = proj_mask[0].cpu().numpy()
+            depth_np = in_vol[0][0].cpu().numpy()
+            pred_np = argmax[0].cpu().numpy()
+            gt_np = proj_labels[0].cpu().numpy()
+            out = make_log_img(depth_np, mask_np, pred_np, gt_np, trainingset.get_color)
+
+            mask_np = proj_mask[1].cpu().numpy()
+            depth_np = in_vol[1][0].cpu().numpy()
+            pred_np = argmax[1].cpu().numpy()
+            gt_np = proj_labels[1].cpu().numpy()
+            out2 = make_log_img(depth_np, mask_np, pred_np, gt_np, trainingset.get_color)
+
+            out = np.concatenate([out, out2], axis=0)
+            cv2.imwrite(cf.paths["save_path"] + "/" + str(i) + ".png", out)
+
+        # ------------------------------------------
+
         for g in optimizer.param_groups:
             lr = g["lr"]
 
