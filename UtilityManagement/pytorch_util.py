@@ -1,12 +1,17 @@
 import torch.nn as nn
 import torch
+import torch.nn.functional as F
 from torchinfo import summary
 
 def get_summary(model, dev):
-    return summary(model, (1, 4, 256, 64), device=dev)
+    return summary(model, (1, 5, 2048, 64), device=dev)
+
+def set_softmax(layer, axis=1):
+    return F.softmax(layer, dim=axis)
 
 def set_deconv(in_channel, out_channel, kernel=3, strides=1, dilation=1, padding=1, out_padding=1, bias=True):
     return nn.ConvTranspose2d(in_channel, out_channel, kernel_size=kernel, stride=strides, dilation=dilation, padding=padding, output_padding=out_padding, bias=bias)
+
 
 def set_conv(in_channel, out_channel, kernel=3, strides=1, dilation=1, padding=1, bias=True):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, dilation=dilation, padding=padding, bias=bias)
@@ -40,8 +45,8 @@ def set_relu6(use_input=True):
     return nn.ReLU6(inplace=use_input)
 
 
-def set_avg_pool(kernel, strides=1):
-    return nn.AvgPool2d(kernel_size=kernel, stride=strides)
+def set_avg_pool(kernel, strides=1, padding=0):
+    return nn.AvgPool2d(kernel_size=kernel, stride=strides, padding=padding)
 
 
 def set_max_pool(kernel, strides=2, padding=0):
@@ -50,6 +55,10 @@ def set_max_pool(kernel, strides=2, padding=0):
 
 def set_dense(in_channel, out_channel):
     return nn.Linear(in_channel, out_channel)
+
+
+def set_pixel_shuffle(scale=2):
+    return nn.PixelShuffle(scale)
 
 
 def set_concat(list, axis=1):
@@ -75,6 +84,9 @@ def load_weight_parameter(model, name):
 
 def load_weight_file(file):
     return torch.load(file)
+
+def nll_loss(weight):
+    return nn.NLLLoss(weight=weight)
 
 
 def loss_cross_entropy():

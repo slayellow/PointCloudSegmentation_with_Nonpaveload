@@ -1,169 +1,276 @@
 import torch.autograd
+import torch.backends.cudnn as cudnn
 import cv2
 from DataManagement.data_management import *
-from ModelManagement.PytorchModel.DeepLab_V3_Plus import *
-from UtilityManagement.AverageMeter import *
-from ModelManagement.evaluator import Evaluator
+from ModelManagement.PytorchModel.SalsaNext import *
+from ModelManagement.AverageMeter import *
+from ModelManagement.Lovsaz_Softmax import Lovasz_softmax
+from ModelManagement.warmupLR import warmupLR
+from ModelManagement.Evaluator import Evaluator
 import time
+import datetime
 
-save_datalist()
 
-learning_rate = cf.network_info['learning_rate']
-gpu_check = is_gpu_avaliable()
-devices = torch.device("cuda") if gpu_check else torch.device("cpu")
+# Load Parsing File
+model_info = yaml.safe_load(open("UtilityManagement/" + cf.paths["model_info"], 'r'))
+dataset_info = yaml.safe_load(open("UtilityManagement/" + cf.paths["dataset_info"], 'r'))
 
-eval = Evaluator(cf.NUM_CLASSES)
+# Load GPU
+if is_gpu_avaliable():
+    devices = torch.device("cuda")
+    print("I Use GPU --> Device : CUDA")
+else:
+    devices = torch.device("cpu")
+    print("I Use CPU --> Device : CPU")
 
-trainingset = GTA5Dataset(cf.paths['train_dataset_file'])
-data_loader = get_loader(trainingset, batch_size=cf.network_info['batch_size'], shuffle=True, num_worker=cf.network_info['num_worker'])
+# Load Dataset
+trainingset = SemanticKitti(model_info, dataset_info, True, 0)
+data_loader = get_loader(trainingset, model_info["train"]["batch_size"], shuffle=True, num_worker=model_info["train"]["workers"])
+print("Semantic-KITTI Training Dataset Load Success --> DataSize : {}, Sequences : {}".format(len(trainingset), trainingset.get_sequence()))
 
-validationset = GTA5Dataset(cf.paths['valid_dataset_file'])
-valid_loader = get_loader(validationset, batch_size=int(cf.network_info['batch_size']/2), shuffle=False, num_worker=cf.network_info['num_worker'])
+validationset = SemanticKitti(model_info, dataset_info, True, 1)
+valid_loader = get_loader(trainingset, model_info["train"]["batch_size"], shuffle=False, num_worker=model_info["train"]["workers"])
+print("Semantic-KITTI Validation Dataset Load Success --> DataSize : {}, Sequences : {}".format(len(validationset), validationset.get_sequence()))
 
-# model test code
-model = DeepLabV3Plus(cf.NUM_CLASSES).to(devices)
+# Load Loss Func, Optimizer
+# 원 코드에서는 Epsilon을 사용하였지만, 현 코드에서는 Epsilon을 사용하지 않고 훈련을 진행할 예정이다.
+# epsilon_w = model_info["train"]["epsilon_w"]
+content = torch.zeros(trainingset.get_num_classes(), dtype=torch.float)
+for cl, freq in dataset_info["content"].items():
+    x_cl = trainingset.get_xentropy_map(cl)
+    content[x_cl] += freq
+loss_w = 1 / content                # loss_w = 1 / ( content + epsilon_w )
+for x_cl, weight in enumerate(loss_w):
+    if dataset_info["learning_ignore"][x_cl]:
+        loss_w[x_cl] = 0
+print("Loss Weight from Imbalanced Class : ", loss_w.data)
 
-criterion = nn.CrossEntropyLoss(ignore_index=255, reduction='mean')
+# Load Model
+with torch.no_grad():
+    model = salsanext(trainingset.get_num_classes()).to(devices)
+    get_summary(model, devices)
 
-optimizer = set_SGD(model, learning_rate=learning_rate)
+if is_gpu_avaliable() and get_gpu_device_count() > 0:
+    cudnn.benchmark = True
+    cudnn.fastest = True
 
-best_pred = 0.0
+# Load Loss Function and Optimizer
+criterion = nll_loss(loss_w).to(devices)
+ls = Lovasz_softmax(ignore=0).to(devices)
 
+optimizer = set_SGD(model=model, learning_rate=model_info["train"]["lr"], momentum=model_info["train"]["momentum"], weight_decay=model_info["train"]["w_decay"])
+
+# Load Learning Rate Scheduler
+steps_per_epoch = len(data_loader)
+up_steps = int(model_info["train"]["wup_epochs"] * steps_per_epoch)
+final_decay = model_info["train"]["lr_decay"] ** (1 / steps_per_epoch)
+scheduler = warmupLR(optimizer=optimizer, lr=model_info["train"]["lr"], warmup_steps=up_steps, momentum=model_info["train"]["momentum"], decay=final_decay)
+
+info = {"train_loss": 0,
+        "train_acc": 0,
+        "train_iou": 0,
+        "valid_loss": 0,
+        "valid_acc": 0,
+        "valid_iou": 0,
+        "best_train_iou": 0,
+        "best_val_iou": 0}
+
+# Log File Check
 pretrained_path = cf.paths['pretrained_path']
 if os.path.isfile(os.path.join(pretrained_path, model.get_name() + '.pth')):
+    torch.nn.Module.dump_patches = True         # Pytorch 버전이 안맞아도 작동이 될 수 있게끔 설정하는 구문
     print("Pretrained Model Open : ", model.get_name() + ".pth")
     checkpoint = load_weight_file(os.path.join(pretrained_path, model.get_name() + '.pth'))
     start_epoch = checkpoint['epoch']
+    info = checkpoint["info"]
     load_weight_parameter(model, checkpoint['state_dict'])
     load_weight_parameter(optimizer, checkpoint['optimizer'])
+    load_weight_parameter(scheduler, checkpoint["scheduler"])
     best_pred = checkpoint['best_pred']
 else:
     print("No Pretrained Model")
     start_epoch = 0
 
-for epoch in range(start_epoch, cf.network_info['epochs']):
+batch_time_t = AverageMeter()
+data_time_t = AverageMeter()
+batch_time_e = AverageMeter()
 
-    # Learning Rate 조절하기
-    lr = learning_rate * (0.1 ** (epoch // 10))  # ResNet Lerarning Rate
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+ignore_class = []
+for i, w in enumerate(loss_w):
+    if w < 1e-10:
+        ignore_class.append(i)
+evaluator = Evaluator(trainingset.get_num_classes(), devices, ignore_class)
 
-    batch_time = AverageMeter()
-    data_time = AverageMeter()
+for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
+
     losses = AverageMeter()
+    acc = AverageMeter()
+    iou = AverageMeter()
+
+    if is_gpu_avaliable():
+        torch.cuda.empty_cache()        # 사용하지 않으면서 캐시된 메모리들을 해제해준다.
 
     model.train()
 
     end = time.time()
+    for i, (in_vol, proj_mask, proj_labels, _, path_seq, path_name, _, _, _, _, _, _, _, _, _) in enumerate(data_loader):
 
-    for i_batch, sample_bathced in enumerate(data_loader):
-        data_time.update(time.time() - end)
+        data_time_t.update(time.time() - end)
 
-        source = sample_bathced['source']
-        target = sample_bathced['target'].squeeze()
-        target *= 255.0
-        target = target.type(torch.long)
-        if gpu_check:
-            source = source.to(devices)
-            target = target.to(devices)
+        if is_gpu_avaliable():
+            in_vol = in_vol.to(devices)
+            proj_labels = proj_labels.to(devices)
 
-        output = model(source)
-        loss = criterion(output, target)
-
-        losses.update(loss.item(), source.size(0))
+        output = model(in_vol)
+        loss = criterion(torch.log(output.clamp(min=1e-8)), proj_labels.long()) + ls(output, proj_labels.long())
 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        batch_time.update(time.time() - end)
+        loss = loss.mean()
+
+        with torch.no_grad():
+            evaluator.reset()
+            argmax = output.argmax(dim=1)
+            evaluator.addBatch(argmax, proj_labels)
+            accuracy = evaluator.getacc()
+            jaccard, class_jaccard = evaluator.getIoU()
+
+        losses.update(loss.item(), in_vol.size(0))
+        acc.update(accuracy.item(), in_vol.size(0))
+        iou.update(jaccard.item(), in_vol.size(0))
+
+        batch_time_t.update(time.time() - end)      # 배치 크기만큼 불러와 학습을 마치고 BackPropagation까지 하는데 걸리는 시간
         end = time.time()
 
-        if i_batch % cf.network_info['freq_print'] == 0:
-            print('Epoch: [{0}][{1}/{2}]\t'
-                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(epoch+1, i_batch, len(data_loader),
-                                                        batch_time=batch_time, data_time=data_time, loss=losses))
+        for g in optimizer.param_groups:
+            lr = g["lr"]
 
-    valid_batch_time = AverageMeter()
-    valid_data_time = AverageMeter()
-    valid_losses = AverageMeter()
+        estimate = int((data_time_t.avg + batch_time_t.avg) * \
+                       (len(data_loader) * model_info['train']['max_epochs'] - (
+                               i + 1 + epoch * len(data_loader)))) + \
+                   int(batch_time_e.avg * len(valid_loader) * (
+                           model_info['train']['max_epochs'] - (epoch)))
 
-    model.eval()
-    eval.reset()
-    source = None
-    output = None
+        if i % model_info["train"]["report_batch"] == 0:
+            print('Lr: {lr:.3e} | '
+                  'Epoch: [{0}][{1}/{2}] | '
+                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f}) | '
+                  'Data {data_time.val:.3f} ({data_time.avg:.3f}) | '
+                  'Loss {loss.val:.4f} ({loss.avg:.4f}) | '
+                  'acc {acc.val:.3f} ({acc.avg:.3f}) | '
+                  'IoU {iou.val:.3f} ({iou.avg:.3f}) | [{estim}]'.format(
+                epoch, i, len(data_loader), batch_time=batch_time_t,
+                data_time=data_time_t, loss=losses, acc=acc, iou=iou, lr=lr,
+                estim=str(datetime.timedelta(seconds=estimate))))
 
-    end = time.time()
-    for i_batch, sample_bathced in enumerate(valid_loader):
-        data_time.update(time.time() - end)
+        scheduler.step()
 
-        source = sample_bathced['source']
-        target = sample_bathced['target'].squeeze()
+    # Epoch Finish
+    info["train_loss"] = loss
+    info["train_acc"] = acc
+    info["train_iou"] = iou
 
-        target *= 255.0
-        target = target.type(torch.long)
-        if gpu_check:
-            source = source.to(devices)
-            target = target.to(devices)
+    state = {'epoch': epoch, 'state_dict': model.state_dict(),
+             'optimizer': optimizer.state_dict(),
+             'info': info,
+             'scheduler': scheduler.state_dict()}
 
-        output = model(source)
-        loss = criterion(output, target)
+    torch.save(state, os.path.join(pretrained_path, model.get_name()), 'pth')
 
-        losses.update(loss.item(), source.size(0))
+    if info['train_iou'] > info['best_train_iou']:
+        print("Best mean iou in training set so far, save model!")
+        info['best_train_iou'] = info['train_iou']
+        state = {'epoch': epoch, 'state_dict': model.state_dict(),
+                 'optimizer': optimizer.state_dict(),
+                 'info': info,
+                 'scheduler': scheduler.state_dict()}
+        torch.save(state, os.path.join(pretrained_path, model.get_name()), suffix="_train_best")
 
-        batch_time.update(time.time() - end)
-        end = time.time()
+# Validation Process
 
-        pred = output.data.cpu().numpy()
-        target = target.cpu().numpy()
-        pred = np.argmax(pred, axis=1)
-        eval.add_batch(target, pred)
+    if epoch % model_info["train"]["report_epoch"] == 0:
+        print("*" * 20)
 
-        if i_batch % cf.network_info['freq_print'] == 0:
-            print('Test: [{0}/{1}]\t'
-                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(i_batch, len(valid_loader),
-                                                        batch_time=batch_time, data_time=data_time, loss=losses))
+        losses = AverageMeter()
+        jaccs = AverageMeter()
+        wces = AverageMeter()
+        acc = AverageMeter()
+        iou = AverageMeter()
+        hetero_l = AverageMeter()
+        rand_imgs = []
 
-    # Input Image, Predict Image Show
-    img = source.cpu().numpy()
-    pred = output.data.cpu().numpy()
-    pred = np.argmax(pred, axis=1)
-    segmap = np.array(pred[0]).astype(np.uint8)
-    segmap = decode_segmap(segmap)
-    img = np.transpose(img[0], axes=[1, 2, 0])
-    ann = target
-    ann = np.array(ann[0]).astype(np.uint8)
-    ann = decode_segmap(ann)
-    plt.figure()
-    plt.subplot(311)
-    plt.imshow(img)
-    plt.subplot(312)
-    plt.imshow(segmap)
-    plt.subplot(313)
-    plt.imshow(ann)
-    plt.savefig('Result_' + str(epoch) + '.png')
+        model.eval()
+        evaluator.reset()
 
-    Acc = eval.Pixel_Accuracy()
-    Acc_class = eval.Pixel_Accuracy_Class()
-    mIoU = eval.Mean_Intersection_over_Union()
-    FWIoU = eval.Frequency_Weighted_Intersection_over_Union()
+        if is_gpu_avaliable():
+            torch.cuda.empty_cache()        # 사용하지 않으면서 캐시된 메모리들을 해제해준다.
 
-    print("* Validation --> Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(Acc, Acc_class, mIoU, FWIoU))
+        with torch.no_grad():
+            end = time.time()
+            for i, (in_vol, proj_mask, proj_labels, _, path_seq, path_name, _, _, _, _, _, _, _, _, _) in enumerate(valid_loader):
+                if is_gpu_avaliable():
+                    in_vol = in_vol.to(devices)
+                    proj_labels = proj_labels.to(devices)
 
-    new_pred = mIoU
-    if new_pred  > best_pred:
-        best_pred = new_pred
+                output = model(in_vol)
+                log_out = torch.log(output.clamp(min=1e-8))
+                jacc = ls(output, proj_labels)
+                wce = criterion(log_out, proj_labels)
+                loss = wce + jacc
 
-    save_checkpoint({
-        'epoch': epoch + 1,
-        'arch' : model.get_name(),
-        'state_dict': model.state_dict(),
-        'optimizer': optimizer.state_dict(),
-        'best_pred': best_pred}, False, os.path.join(pretrained_path, model.get_name()),'pth')
+                argmax = output.argmax(dim=1)
+                evaluator.addBatch(argmax, proj_labels)
+
+                losses.update(loss.mean().item(), in_vol.size(0))
+                jaccs.update(jacc.mean().item(), in_vol.size(0))
+                wces.update(wce.mean().item(), in_vol.size(0))
+
+                batch_time_e.update(time.time() - end)
+                end = time.time()
+
+            accuracy = evaluator.getacc()
+            jaccard, class_jaccard = evaluator.getIoU()
+            acc.update(accuracy.item(), in_vol.size(0))
+            iou.update(jaccard.item(), in_vol.size(0))
+
+            print('Validation set:\n'
+                  'Time avg per batch {batch_time.avg:.3f}\n'
+                  'Loss avg {loss.avg:.4f}\n'
+                  'Jaccard avg {jac.avg:.4f}\n'
+                  'WCE avg {wces.avg:.4f}\n'
+                  'Acc avg {acc.avg:.3f}\n'
+                  'IoU avg {iou.avg:.3f}'.format(batch_time=batch_time_e,
+                                                 loss=losses,
+                                                 jac=jaccs,
+                                                 wces=wces,
+                                                 acc=acc, iou=iou))
+
+            for i, jacc in enumerate(class_jaccard):
+                print('IoU class {i:} [{class_str:}] = {jacc:.3f}'.format(
+                    i=i, class_str=validationset.get_xentropy_class_string(i), jacc=jacc))
+                info["valid_classes/" + validationset.get_xentropy_class_string(i)] = jacc
+
+        # update info
+        info["valid_loss"] = losses.avg
+        info["valid_acc"] = acc.avg
+        info["valid_iou"] = iou.avg
+
+        if info['valid_iou'] > info['best_val_iou']:
+            print("Best mean iou in validation so far, save model!")
+            print("*" * 20)
+            info['best_val_iou'] = info['valid_iou']
+
+            # save the weights!
+            state = {'epoch': epoch, 'state_dict': model.state_dict(),
+                     'optimizer': optimizer.state_dict(),
+                     'info': info,
+                     'scheduler': scheduler.state_dict()
+                     }
+            torch.save(state, os.path.join(pretrained_path, model.get_name()), suffix="_valid_best")
+
+        print("*" * 80)
 
 
 print("Train Finished!!")

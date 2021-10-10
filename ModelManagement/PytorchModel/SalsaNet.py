@@ -31,24 +31,26 @@ class DecoderBlock(nn.Module):
 
     def forward(self, x, skip_layer):
         out = self.deconv(x)
-        out = self.bn(out)
         out = self.leakyrelu(out)
+        out = self.bn(out)
         out = self.dropout(out)
 
         out = out + skip_layer
         out = self.dropout(out)
 
         out = self.conv1(out)
-        out = self.bn1(out)
         out = self.leakyrelu(out)
+        out = self.bn1(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
         out = self.leakyrelu(out)
+        out = self.bn2(out)
+
 
         out = self.conv3(out)
-        out = self.bn3(out)
         out = self.leakyrelu(out)
+        out = self.bn3(out)
+
 
         out = self.dropout(out)
 
@@ -75,16 +77,19 @@ class EncoderBlock(nn.Module):
 
     def forward(self, x):
         shortcut = self.conv0(x)
-        shortcut = self.bn0(shortcut)
         shortcut = self.leakyrelu(shortcut)
+        shortcut = self.bn0(shortcut)
+
 
         out = self.conv1(x)
-        out = self.bn1(out)
         out = self.leakyrelu(out)
+        out = self.bn1(out)
+
 
         out = self.conv2(out)
-        out = self.bn2(out)
         out = self.leakyrelu(out)
+        out = self.bn2(out)
+
 
         out = out + shortcut
         before_pooling = self.dropout(out)
