@@ -5,6 +5,6 @@ import numpy as np
 paths = dict(
         dataset_info = "parser/semantic-kitti.yaml",
         model_info = "parser/salsanext.yml",
-        pretrained_path = "/Users/jinseokhong/data/SemanticKITTI",
-        save_path = "/Users/jinseokhong/data/SemanticKITTI/Result"
+        pretrained_path = "/home/HONG/PretrainedParameter/PointCloudSegmentation",
+        save_path = "/home/HONG/Semantic-KITTI/Result"
 )

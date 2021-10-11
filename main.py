@@ -29,7 +29,7 @@ data_loader = get_loader(trainingset, model_info["train"]["batch_size"], shuffle
 print("Semantic-KITTI Training Dataset Load Success --> DataSize : {}, Sequences : {}".format(len(trainingset), trainingset.get_sequence()))
 
 validationset = SemanticKitti(model_info, dataset_info, True, 1)
-valid_loader = get_loader(trainingset, model_info["train"]["batch_size"], shuffle=False, num_worker=model_info["train"]["workers"])
+valid_loader = get_loader(trainingset, int(model_info["train"]["batch_size"] / model_info["train"]["batch_size"]), shuffle=False, num_worker=model_info["train"]["workers"])
 print("Semantic-KITTI Validation Dataset Load Success --> DataSize : {}, Sequences : {}".format(len(validationset), validationset.get_sequence()))
 
 # Load Loss Func, Optimizer
@@ -196,7 +196,7 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
              'info': info,
              'scheduler': scheduler.state_dict()}
 
-    torch.save(state, os.path.join(pretrained_path, model.get_name()), 'pth')
+    torch.save(state, os.path.join(pretrained_path, model.get_name()) + '.pth')
 
     if info['train_iou'] > info['best_train_iou']:
         print("Best mean iou in training set so far, save model!")
@@ -205,7 +205,7 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
                  'optimizer': optimizer.state_dict(),
                  'info': info,
                  'scheduler': scheduler.state_dict()}
-        torch.save(state, os.path.join(pretrained_path, model.get_name()), suffix="_train_best")
+        torch.save(state, os.path.join(pretrained_path, model.get_name()) + '_train_best.pth')
 
 # Validation Process
 
@@ -287,7 +287,7 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
                      'info': info,
                      'scheduler': scheduler.state_dict()
                      }
-            torch.save(state, os.path.join(pretrained_path, model.get_name()), suffix="_valid_best")
+            torch.save(state, os.path.join(pretrained_path, model.get_name()) + "_valid_best.pth")
 
         print("*" * 80)
 
