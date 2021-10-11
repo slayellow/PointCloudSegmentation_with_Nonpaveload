@@ -187,7 +187,7 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
         scheduler.step()
 
     # Epoch Finish
-    info["train_loss"] = loss.avg
+    info["train_loss"] = losses.avg
     info["train_acc"] = acc.avg
     info["train_iou"] = iou.avg
 
