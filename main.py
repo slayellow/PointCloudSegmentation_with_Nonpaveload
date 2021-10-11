@@ -187,9 +187,9 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
         scheduler.step()
 
     # Epoch Finish
-    info["train_loss"] = loss
-    info["train_acc"] = acc
-    info["train_iou"] = iou
+    info["train_loss"] = loss.avg
+    info["train_acc"] = acc.avg
+    info["train_iou"] = iou.avg
 
     state = {'epoch': epoch, 'state_dict': model.state_dict(),
              'optimizer': optimizer.state_dict(),
