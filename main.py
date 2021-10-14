@@ -86,7 +86,6 @@ if os.path.isfile(os.path.join(pretrained_path, model.get_name() + '.pth')):
     load_weight_parameter(model, checkpoint['state_dict'])
     load_weight_parameter(optimizer, checkpoint['optimizer'])
     load_weight_parameter(scheduler, checkpoint["scheduler"])
-    best_pred = checkpoint['best_pred']
 else:
     print("No Pretrained Model")
     start_epoch = 0
@@ -236,7 +235,7 @@ for epoch in range(start_epoch, model_info["train"]["max_epochs"]):
                 output = model(in_vol)
                 log_out = torch.log(output.clamp(min=1e-8))
                 jacc = ls(output, proj_labels)
-                wce = criterion(log_out, proj_labels)
+                wce = criterion(log_out, proj_labels.long())
                 loss = wce + jacc
 
                 argmax = output.argmax(dim=1)
