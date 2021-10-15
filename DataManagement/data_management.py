@@ -50,10 +50,10 @@ def is_label(filename):
 
 
 class SemanticKitti(Dataset):
-    def __init__(self, model_info, dataset_info, transform=True, mode=0):
+    def __init__(self, model_info, dataset_info, transform=False, mode=0):
         self.model_info = model_info
         self.dataset_info = dataset_info
-        self.transform = transforms
+        self.transform = transform
         self.mode = mode        # 0 : Train, 1 : Validation, 2 : Test
         self.gt = False
 

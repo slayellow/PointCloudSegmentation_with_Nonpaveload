@@ -25,8 +25,8 @@ else:
     print("I Use CPU --> Device : CPU")
 
 # Load Dataset
-testset = SemanticKitti(model_info, dataset_info, True, 2)
-data_loader = get_loader(testset, model_info["train"]["batch_size"], shuffle=False, num_worker=model_info["train"]["workers"])
+testset = SemanticKitti(model_info, dataset_info, transform=False, mode=2)
+data_loader = get_loader(testset, 1, shuffle=False, num_worker=model_info["train"]["workers"])
 print("Semantic-KITTI Test Dataset Load Success --> DataSize : {}, Sequences : {}".format(len(testset), testset.get_sequence()))
 
 # Load Model
@@ -72,10 +72,11 @@ with torch.no_grad():
 
   for i, (proj_in, proj_mask, _, _, path_seq, path_name, p_x, p_y, proj_range, unproj_range, _, _, _, _, npoints) in enumerate(data_loader):
     # first cut to rela size (batch size one allows it)
-    p_x = p_x[0, :npoints]
-    p_y = p_y[0, :npoints]
-    proj_range = proj_range[0, :npoints]
-    unproj_range = unproj_range[0, :npoints]
+
+    p_x = p_x[0, :npoints[0]]
+    p_y = p_y[0, :npoints[0]]
+    proj_range = proj_range[0, :npoints[0]]
+    unproj_range = unproj_range[0, :npoints[0]]
     path_seq = path_seq[0]
     path_name = path_name[0]
 
