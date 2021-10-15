@@ -263,6 +263,10 @@ class SemanticKitti(Dataset):
         label = self.map(label, self.learning_map_inv)
         return self.map(label, self.color_map)
 
+    def get_original(self, label):
+        # put label in original values
+        return self.map(label, self.learning_map_inv)
+
 
 def get_loader(dataset, batch_size, shuffle=True, num_worker=0):
     dataloader = DataLoader(
