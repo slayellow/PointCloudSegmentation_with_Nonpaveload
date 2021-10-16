@@ -1,0 +1,213 @@
+import numpy as np
+import torch
+import random
+from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
+import torchvision.transforms as transforms
+from DataManagement.LaserScan import LaserScan, SemLaserScan
+import UtilityManagement.config as cf
+import os
+import matplotlib.pyplot as plt
+import cv2
+import yaml
+
+EXTENSIONS_SCAN = ['.bin']      # Dataset File Extension
+EXTENSIONS_LABEL = ['.label']   # Label File Extension
+
+
+def get_mpl_colormap(cmap_name):
+    cmap = plt.get_cmap(cmap_name)
+    # Initialize the matplotlib color map
+    sm = plt.cm.ScalarMappable(cmap=cmap)
+    # Obtain linear color range
+    color_range = sm.to_rgba(np.linspace(0, 1, 256), bytes=True)[:, 2::-1]
+    return color_range.reshape(256, 1, 3)
+
+
+def make_log_img(depth, mask, pred, gt, color_fn):
+    # input should be [depth, pred, gt]
+    # make range image (normalized to 0,1 for saving)
+    depth = (cv2.normalize(depth, None, alpha=0, beta=1,
+                           norm_type=cv2.NORM_MINMAX,
+                           dtype=cv2.CV_32F) * 255.0).astype(np.uint8)
+    out_img = cv2.applyColorMap(
+        depth, get_mpl_colormap('viridis')) * mask[..., None]
+    # make label prediction
+    pred_color = color_fn((pred * mask).astype(np.int32))
+    out_img = np.concatenate([out_img, pred_color], axis=0)
+    # make label gt
+    gt_color = color_fn(gt)
+    out_img = np.concatenate([out_img, gt_color], axis=0)
+    return (out_img).astype(np.uint8)
+
+
+def is_scan(filename):
+  return any(filename.endswith(ext) for ext in EXTENSIONS_SCAN)
+
+
+def is_label(filename):
+  return any(filename.endswith(ext) for ext in EXTENSIONS_LABEL)
+
+
+class Changwon(Dataset):
+    def __init__(self, model_info, dataset_info):
+        self.model_info = model_info
+        self.dataset_info = dataset_info
+
+        self.root = os.path.join(self.model_info["dataset"]["changwon_path"], "sequences")
+
+        self.sequences = self.dataset_info["changwon_test"]
+
+        self.labels = self.dataset_info["labels"]
+        self.color_map = self.dataset_info["color_map"]
+        self.learning_map = self.dataset_info["learning_map"]
+        self.learning_map_inv = self.dataset_info["learning_map_inv"]
+        self.sensor = self.model_info["dataset"]["sensor"]
+        self.sensor_img_H = self.sensor["img_prop"]["height"]
+        self.sensor_img_W = self.sensor["img_prop"]["width"]
+        self.sensor_img_means = torch.tensor(self.sensor["img_means"], dtype=torch.float)
+        self.sensor_img_stds = torch.tensor(self.sensor["img_stds"], dtype=torch.float)
+        self.sensor_fov_up = self.sensor["fov_up"]
+        self.sensor_fov_down = self.sensor["fov_down"]
+        self.max_points = self.model_info["dataset"]["changwon_max_point"]
+
+        self.nclasses = len(self.learning_map_inv)
+
+        self.scan_files = []
+        self.label_files = []
+
+        for seq in self.sequences:
+            seq = '{0:02d}'.format(int(seq))
+
+            scan_path = os.path.join(self.root, seq, "velodyne")
+            label_path = os.path.join(self.root, seq, "labels")
+
+            scan_files = [os.path.join(dp, f) for dp, _, fn in os.walk(os.path.expanduser(scan_path)) for f in fn if is_scan(f)]
+            label_files = [os.path.join(dp, f) for dp, _, fn in os.walk(os.path.expanduser(label_path)) for f in fn if is_label(f)]
+
+            self.scan_files.extend(scan_files)
+            self.label_files.extend(label_files)
+
+        self.scan_files.sort()
+        self.label_files.sort()
+
+
+    def __getitem__(self, index):
+        scan_file = self.scan_files[index]
+
+        scan = LaserScan(project=True,
+                         H=self.sensor_img_H,
+                         W=self.sensor_img_W,
+                         fov_up=self.sensor_fov_up,
+                         fov_down=self.sensor_fov_down)
+
+        scan.open_scan(scan_file)
+
+        unproj_n_points = scan.points.shape[0]
+        unproj_xyz = torch.full((self.max_points, 3), -1.0, dtype=torch.float)
+        unproj_xyz[:unproj_n_points] = torch.from_numpy(scan.points)
+        unproj_range = torch.full([self.max_points], -1.0, dtype=torch.float)
+        unproj_range[:unproj_n_points] = torch.from_numpy(scan.unproj_range)
+        unproj_remissions = torch.full([self.max_points], -1.0, dtype=torch.float)
+        unproj_remissions[:unproj_n_points] = torch.from_numpy(scan.remissions)
+
+        unproj_labels = []
+
+        proj_range = torch.from_numpy(scan.proj_range).clone()
+        proj_xyz = torch.from_numpy(scan.proj_xyz).clone()
+        proj_remission = torch.from_numpy(scan.proj_remission).clone()
+        proj_mask = torch.from_numpy(scan.proj_mask)
+
+        proj_labels = []
+        proj_x = torch.full([self.max_points], -1, dtype=torch.long)
+        proj_x[:unproj_n_points] = torch.from_numpy(scan.proj_x)
+        proj_y = torch.full([self.max_points], -1, dtype=torch.long)
+        proj_y[:unproj_n_points] = torch.from_numpy(scan.proj_y)
+        proj = torch.cat([proj_range.unsqueeze(0).clone(),
+                          proj_xyz.clone().permute(2, 0, 1),
+                          proj_remission.unsqueeze(0).clone()])
+        proj = (proj - self.sensor_img_means[:, None, None]
+                ) / self.sensor_img_stds[:, None, None]
+        proj = proj * proj_mask.float()
+
+        path_norm = os.path.normpath(scan_file)
+        path_split = path_norm.split(os.sep)
+        path_seq = path_split[-3]
+        path_name = path_split[-1].replace(".bin", ".label")
+
+        return proj, proj_mask, proj_labels, unproj_labels, path_seq, path_name, proj_x, proj_y, proj_range, unproj_range, proj_xyz, unproj_xyz, proj_remission, unproj_remissions, unproj_n_points
+
+    def __len__(self):
+        return len(self.scan_files)
+
+    @staticmethod
+    def map(label, mapdict):
+        # put label from original values to xentropy
+        # or vice-versa, depending on dictionary values
+        # make learning map a lookup table
+        maxkey = 0
+        for key, data in mapdict.items():
+            if isinstance(data, list):
+                nel = len(data)
+            else:
+                nel = 1
+            if key > maxkey:
+                maxkey = key
+        # +100 hack making lut bigger just in case there are unknown labels
+        if nel > 1:
+            lut = np.zeros((maxkey + 100, nel), dtype=np.int32)
+        else:
+            lut = np.zeros((maxkey + 100), dtype=np.int32)
+        for key, data in mapdict.items():
+            try:
+                lut[key] = data
+            except IndexError:
+                print("Wrong key ", key)
+        # do the mapping
+        return lut[label]
+
+    def get_sequence(self):
+        return self.sequences
+
+
+    def get_xentropy_class_string(self, idx):
+        return self.labels[self.learning_map_inv[idx]]
+
+    def get_num_classes(self):
+        return self.nclasses
+
+    def get_color(self, label):
+        label = self.map(label, self.learning_map_inv)
+        return self.map(label, self.color_map)
+
+    def get_original(self, label):
+        # put label in original values
+        return self.map(label, self.learning_map_inv)
+
+
+def get_loader(dataset, batch_size, shuffle=False, num_worker=0):
+    dataloader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        num_workers=num_worker,
+        pin_memory=True,
+        sampler=None
+        )
+    return dataloader
+
+
+
+#
+# model_info = yaml.safe_load(open("../UtilityManagement/" + cf.paths["model_info"], 'r'))
+# dataset_info = yaml.safe_load(open("../UtilityManagement/" + cf.paths["dataset_info"], 'r'))
+#
+# dataset = SemanticKitti(model_info, dataset_info, True, 0)
+# data_loader = get_loader(dataset, 2, shuffle=True)
+#
+# for i, (in_vol, proj_mask, proj_labels, _, path_seq, path_name, _, _, _, _, _, _, _, _, _) in enumerate(data_loader):
+#     input_point = in_vol[0]
+#
+#     plt.figure()
+#     plt.imshow(input_point[1, :, :])
+#     plt.show()
