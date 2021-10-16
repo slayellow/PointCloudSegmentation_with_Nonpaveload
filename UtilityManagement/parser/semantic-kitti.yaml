@@ -211,4 +211,6 @@ split: # sequence numbers
     - 20
     - 21
 changwon_test:
+  - 97
+  - 98
   - 99

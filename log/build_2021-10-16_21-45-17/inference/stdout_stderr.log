@@ -1,0 +1,29 @@
+/root/anaconda3/lib/python3.8/site-packages/setuptools/dist.py:697: UserWarning: Usage of dash-separated 'script-dir' will not be supported in future versions. Please use the underscore name 'script_dir' instead
+  warnings.warn(
+/root/anaconda3/lib/python3.8/site-packages/setuptools/dist.py:697: UserWarning: Usage of dash-separated 'install-scripts' will not be supported in future versions. Please use the underscore name 'install_scripts' instead
+  warnings.warn(
+running egg_info
+writing ../build/inference/inference.egg-info/PKG-INFO
+writing dependency_links to ../build/inference/inference.egg-info/dependency_links.txt
+writing entry points to ../build/inference/inference.egg-info/entry_points.txt
+writing requirements to ../build/inference/inference.egg-info/requires.txt
+writing top-level names to ../build/inference/inference.egg-info/top_level.txt
+reading manifest file '../build/inference/inference.egg-info/SOURCES.txt'
+writing manifest file '../build/inference/inference.egg-info/SOURCES.txt'
+running build
+running build_py
+copying inference/data_parser.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference
+copying inference/LaserScan.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference
+running install
+running install_lib
+copying /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference/data_parser.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference
+copying /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference/LaserScan.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference
+byte-compiling /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference/data_parser.py to data_parser.cpython-38.pyc
+byte-compiling /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference/LaserScan.py to LaserScan.cpython-38.pyc
+running install_data
+running install_egg_info
+removing '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference-0.0.0-py3.8.egg-info' (and everything under it)
+Copying ../build/inference/inference.egg-info to /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference-0.0.0-py3.8.egg-info
+running install_scripts
+Installing inference script to /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/inference
+writing list of installed files to '/home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log'

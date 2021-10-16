@@ -1,0 +1,236 @@
+[0.475s] DEBUG:colcon:Command line arguments: ['/root/anaconda3/bin/colcon', 'build']
+[0.475s] DEBUG:colcon:Parsed command line arguments: Namespace(ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f5c0d792160>>, merge_install=False, metas=['./colcon.meta'], packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=16, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f5c0d792160>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f5c0d7926a0>)
+[0.487s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.488s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.488s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.488s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.488s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.488s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.488s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/HONG/PointCloudSegmentation_with_Nonpaveload'
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.488s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['ignore', 'ignore_ament_install']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'ignore'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'ignore_ament_install'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['colcon_pkg']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'colcon_pkg'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['colcon_meta']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'colcon_meta'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['ros']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'ros'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['cmake', 'python']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'cmake'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'python'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extensions ['python_setup_py']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement) by extension 'python_setup_py'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'ignore'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'ignore_ament_install'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['colcon_pkg']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'colcon_pkg'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['colcon_meta']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'colcon_meta'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['ros']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'ros'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['cmake', 'python']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'cmake'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'python'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extensions ['python_setup_py']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(DataManagement/__pycache__) by extension 'python_setup_py'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['ignore', 'ignore_ament_install']
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'ignore'
+[0.498s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'ignore_ament_install'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['colcon_pkg']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'colcon_pkg'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['colcon_meta']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'colcon_meta'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['ros']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'ros'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['cmake', 'python']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'cmake'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'python'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extensions ['python_setup_py']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement) by extension 'python_setup_py'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['ignore', 'ignore_ament_install']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'ignore'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'ignore_ament_install'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['colcon_pkg']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'colcon_pkg'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['colcon_meta']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'colcon_meta'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['ros']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'ros'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['cmake', 'python']
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'cmake'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'python'
+[0.499s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extensions ['python_setup_py']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel) by extension 'python_setup_py'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'ignore'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'ignore_ament_install'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['colcon_pkg']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'colcon_pkg'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['colcon_meta']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'colcon_meta'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['ros']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'ros'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['cmake', 'python']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'cmake'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'python'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extensions ['python_setup_py']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/PytorchModel/__pycache__) by extension 'python_setup_py'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'ignore'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'ignore_ament_install'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['colcon_pkg']
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'colcon_pkg'
+[0.500s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['colcon_meta']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'colcon_meta'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['ros']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'ros'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['cmake', 'python']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'cmake'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'python'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extensions ['python_setup_py']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(ModelManagement/__pycache__) by extension 'python_setup_py'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['ignore', 'ignore_ament_install']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'ignore'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'ignore_ament_install'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['colcon_pkg']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'colcon_pkg'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['colcon_meta']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'colcon_meta'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['ros']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'ros'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['cmake', 'python']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'cmake'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'python'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extensions ['python_setup_py']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement) by extension 'python_setup_py'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'ignore'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'ignore_ament_install'
+[0.501s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['colcon_pkg']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'colcon_pkg'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['colcon_meta']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'colcon_meta'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['ros']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'ros'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['cmake', 'python']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'cmake'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'python'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extensions ['python_setup_py']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/__pycache__) by extension 'python_setup_py'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['ignore', 'ignore_ament_install']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'ignore'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'ignore_ament_install'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['colcon_pkg']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'colcon_pkg'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['colcon_meta']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'colcon_meta'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['ros']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'ros'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['cmake', 'python']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'cmake'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'python'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extensions ['python_setup_py']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(UtilityManagement/parser) by extension 'python_setup_py'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.502s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extensions ['ignore', 'ignore_ament_install']
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extension 'ignore'
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extension 'ignore_ament_install'
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extensions ['colcon_pkg']
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extension 'colcon_pkg'
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extensions ['colcon_meta']
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extension 'colcon_meta'
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extensions ['ros']
+[0.503s] Level 1:colcon.colcon_core.package_identification:_identify(inference) by extension 'ros'
+[0.505s] DEBUG:colcon.colcon_core.package_identification:Package 'inference' with type 'ros.ament_python' and name 'inference'
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.505s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.505s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.505s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.505s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.505s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.505s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.540s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_args' from command line to 'None'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_target' from command line to 'None'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_clean_cache' from command line to 'False'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_clean_first' from command line to 'False'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'cmake_force_configure' from command line to 'False'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'ament_cmake_args' from command line to 'None'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'catkin_cmake_args' from command line to 'None'
+[0.541s] Level 5:colcon.colcon_core.verb:set package 'inference' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.541s] DEBUG:colcon.colcon_core.verb:Building package 'inference' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference', 'merge_install': False, 'path': '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference', 'symlink_install': False, 'test_result_base': None}
+[0.542s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.553s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.553s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference' with build type 'ament_python'
+[0.554s] Level 1:colcon.colcon_core.shell:create_environment_hook('inference', 'ament_prefix_path')
+[0.562s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.562s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/ament_prefix_path.ps1'
+[0.563s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/ament_prefix_path.dsv'
+[0.563s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/ament_prefix_path.sh'
+[0.568s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.568s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.572s] DEBUG:colcon.colcon_core.shell:Ignoring prefix path '/opt/ros/foxy'
+[0.808s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference'
+[0.817s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.817s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.823s] DEBUG:colcon.colcon_core.shell:Ignoring prefix path '/opt/ros/foxy'
+[0.830s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference': CONDA_PROMPT_MODIFIER=(base) PYTHONPATH=/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages:${PYTHONPATH} /root/anaconda3/bin/python setup.py egg_info --egg-base ../build/inference build --build-base /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build install --prefix /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference --record /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log --single-version-externally-managed
+[1.126s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference' returned '0': CONDA_PROMPT_MODIFIER=(base) PYTHONPATH=/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages:${PYTHONPATH} /root/anaconda3/bin/python setup.py egg_info --egg-base ../build/inference build --build-base /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build install --prefix /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference --record /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log --single-version-externally-managed
+[1.134s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference' for CMake module files
+[1.134s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference' for CMake config files
+[1.135s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib'
+[1.135s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/bin'
+[1.135s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/pkgconfig/inference.pc'
+[1.135s] Level 1:colcon.colcon_core.environment:checking '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages'
+[1.135s] Level 1:colcon.colcon_core.shell:create_environment_hook('inference', 'pythonpath')
+[1.139s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/pythonpath.ps1'
+[1.140s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/pythonpath.dsv'
+[1.140s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/hook/pythonpath.sh'
+[1.140s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(inference)
+[1.144s] INFO:colcon.colcon_core.shell:Creating package script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/package.ps1'
+[1.145s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/package.dsv'
+[1.145s] INFO:colcon.colcon_core.shell:Creating package script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/package.sh'
+[1.146s] INFO:colcon.colcon_core.shell:Creating package script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/package.bash'
+[1.146s] INFO:colcon.colcon_core.shell:Creating package script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/inference/package.zsh'
+[1.147s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/share/colcon-core/packages/inference)
+[1.147s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.147s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.147s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[1.147s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.153s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify2': 'notify2' not found
+[1.153s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[1.153s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.154s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.154s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.158s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/local_setup.ps1'
+[1.159s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/_local_setup_util_ps1.py'
+[1.160s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/setup.ps1'
+[1.164s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/local_setup.sh'
+[1.164s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/_local_setup_util_sh.py'
+[1.165s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/setup.sh'
+[1.169s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/local_setup.bash'
+[1.170s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/setup.bash'
+[1.174s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/local_setup.zsh'
+[1.174s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/setup.zsh'

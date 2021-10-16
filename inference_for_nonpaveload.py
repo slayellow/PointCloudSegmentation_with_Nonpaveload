@@ -98,14 +98,6 @@ with torch.no_grad():
         end = time.time()
         cnn.append(res)
 
-        if torch.cuda.is_available():
-            torch.cuda.synchronize()
-        res = time.time() - end
-        print("Network seq", path_seq, "scan", path_name,
-              "in", res, "sec")
-        end = time.time()
-        cnn.append(res)
-
         if post:
             # knn postproc
             unproj_argmax = post(proj_range,

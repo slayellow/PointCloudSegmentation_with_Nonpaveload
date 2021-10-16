@@ -1,0 +1,28 @@
+[0.269s] Invoking command in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference': CONDA_PROMPT_MODIFIER=(base) PYTHONPATH=/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages:${PYTHONPATH} /root/anaconda3/bin/python setup.py egg_info --egg-base ../build/inference build --build-base /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build install --prefix /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference --record /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log --single-version-externally-managed
+[0.486s] /root/anaconda3/lib/python3.8/site-packages/setuptools/dist.py:697: UserWarning: Usage of dash-separated 'script-dir' will not be supported in future versions. Please use the underscore name 'script_dir' instead
+[0.487s]   warnings.warn(
+[0.487s] /root/anaconda3/lib/python3.8/site-packages/setuptools/dist.py:697: UserWarning: Usage of dash-separated 'install-scripts' will not be supported in future versions. Please use the underscore name 'install_scripts' instead
+[0.487s]   warnings.warn(
+[0.497s] running egg_info
+[0.498s] writing ../build/inference/inference.egg-info/PKG-INFO
+[0.498s] writing dependency_links to ../build/inference/inference.egg-info/dependency_links.txt
+[0.498s] writing entry points to ../build/inference/inference.egg-info/entry_points.txt
+[0.498s] writing requirements to ../build/inference/inference.egg-info/requires.txt
+[0.498s] writing top-level names to ../build/inference/inference.egg-info/top_level.txt
+[0.507s] reading manifest file '../build/inference/inference.egg-info/SOURCES.txt'
+[0.507s] writing manifest file '../build/inference/inference.egg-info/SOURCES.txt'
+[0.507s] running build
+[0.508s] running build_py
+[0.508s] copying inference/inference.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference
+[0.508s] running install
+[0.508s] running install_lib
+[0.509s] copying /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build/lib/inference/inference.py -> /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference
+[0.509s] byte-compiling /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference/inference.py to inference.cpython-38.pyc
+[0.511s] running install_data
+[0.512s] running install_egg_info
+[0.513s] removing '/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference-0.0.0-py3.8.egg-info' (and everything under it)
+[0.513s] Copying ../build/inference/inference.egg-info to /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages/inference-0.0.0-py3.8.egg-info
+[0.513s] running install_scripts
+[0.527s] Installing inference script to /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/inference
+[0.527s] writing list of installed files to '/home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log'
+[0.544s] Invoked command in '/home/HONG/PointCloudSegmentation_with_Nonpaveload/inference' returned '0': CONDA_PROMPT_MODIFIER=(base) PYTHONPATH=/home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference/lib/python3.8/site-packages:${PYTHONPATH} /root/anaconda3/bin/python setup.py egg_info --egg-base ../build/inference build --build-base /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/build install --prefix /home/HONG/PointCloudSegmentation_with_Nonpaveload/install/inference --record /home/HONG/PointCloudSegmentation_with_Nonpaveload/build/inference/install.log --single-version-externally-managed
