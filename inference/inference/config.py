@@ -8,12 +8,14 @@ paths = dict(
         pretrained_path = "/home/HONG/PretrainedParameter/PointCloudSegmentation",
         save_path = "/home/HONG/Semantic-KITTI/Result",
         log_path = "/home/HONG/Semantic-KITTI/2020-11-18_09-53-12.velodyne128xyz",
-        log_save_path = "/home/HONG/Semantic-KITTI/Changwon_Nonpaveload/dataset/sequences/97/velodyne",
-        changwon_save_path = "/home/HONG/Semantic-KITTI/Changwon_Nonpaveload/dataset/sequences/97/label"
+        log_save_path = "/home/HONG/Semantic-KITTI/Changwon_Nonpaveload/dataset/sequences/95/velodyne",
+        changwon_save_path = "/home/HONG/Semantic-KITTI/Changwon_Nonpaveload/dataset/sequences/95/label"
 )
 
 FRAME_ID = "default"
 VELODYNE_SUB = "TruckMaker/Sensor/VelodyneFCPointCloud"
+OS1_128_SUB = "TruckMaker/Sensor/Ouster128PointCloud"
+OS1_32_SUB = "TruckMaker/Sensor/Ouster32PointCloud"
 SEGMENTATION_POINTCLOUD = "Segmentation_PointCloud"
 PROBMAP_PUB = "Probability_Map"
 

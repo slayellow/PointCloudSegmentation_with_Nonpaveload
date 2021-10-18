@@ -211,6 +211,8 @@ split: # sequence numbers
     - 20
     - 21
 changwon_test:
-  - 97
-  - 98
-  - 99
+  - 95      # VLP-16
+  # - 96      # OS1-32(Simulator)
+  # - 97      # OS1-128(Simulator)
+  # - 98      # VLP-16(Simulator)
+  # - 99      # VLP-128
